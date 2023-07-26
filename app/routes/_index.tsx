@@ -8,9 +8,5 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export default function Index() {
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      Hello World
-    </div>
-  );
+  return <div className="text-3xl font-bold underline">Hello World</div>;
 }

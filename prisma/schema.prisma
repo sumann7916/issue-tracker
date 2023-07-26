@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  full_name     String    @db.VarChar(30)
+  username      String    @db.VarChar(20)
+  password      String    @db.VarChar(100)
+  user_type     UserType
+
+  issues_assigned  Issue[] @relation("AssigneeUser")
+  issues_reported  Issue[] @relation("ReporterUser")
+}
+
+model Issue {
+  id            String    @id @default(uuid())
+  summary       String    @db.VarChar(100)
+  description   String    @db.VarChar(200)
+  status        StatusType
+
+  assignee      User      @relation(name: "AssigneeUser", fields: [assigneeId], references: [id])
+  assigneeId    String
+
+  reporter      User      @relation(name: "ReporterUser", fields: [reporterId], references: [id])
+  reporterId    String
+}
+
+enum UserType {
+  USER
+  ADMIN
+}
+
+enum StatusType {
+  TODO
+  IN_PROGRESS
+  DONE
+}
