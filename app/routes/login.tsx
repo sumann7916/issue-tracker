@@ -1,5 +1,5 @@
 import LoginForm from "~/components/LoginForm";
-import { ActionArgs, redirect } from "@remix-run/node";
+import { ActionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { signinValidator } from "../validators/signin.validator";
 import { validateUserAndGetUserId } from "../utils/login.utils";
@@ -13,6 +13,7 @@ export async function action({ request }: ActionArgs) {
   if (parseSignInInput.error) {
     return validationError(parseSignInInput.error);
   }
+
   const userAndUserId = await validateUserAndGetUserId(parseSignInInput.data);
   if (!userAndUserId) {
     return badRequest({

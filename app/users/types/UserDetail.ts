@@ -5,3 +5,8 @@ export interface UserDetail {
   username: string;
   user_type: UserType;
 }
+
+export interface UserIdAndUsernameType {
+  username: string;
+  id: string;
+}
