@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
-import { SignInputType } from "~/types/signIn.type";
 import { db } from "./db.server";
+import { SignInputType } from "~/users/types/signIn.type";
 
 export const hashPassword = async (passwordString: string) => {
   return await argon2.hash(passwordString);
