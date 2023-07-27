@@ -20,7 +20,6 @@ export const createUserSession = async (
   user_type: UserType,
   redirectTo: string
 ) => {
-  console.log(redirectTo);
   const session = await storage.getSession();
   session.set("userId", userId);
   session.set("user_type", user_type);

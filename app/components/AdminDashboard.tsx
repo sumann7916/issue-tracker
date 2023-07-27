@@ -1,14 +1,21 @@
-import { UserDetail } from "~/types/UserDetail";
 import UserList from "./UserList";
-import { useSearchParams } from "@remix-run/react";
+import { useNavigate, useSearchParams } from "@remix-run/react";
 import AddUserModal from "./AddUserModal";
+import { UserDetail } from "~/users/types/UserDetail";
 
 const AdminDashboard = ({ userList }: { userList: UserDetail[] }) => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   return (
-    <div className="py-6 px-4 sm:px-6 lg:px-8">
+    <div className="py-6 px-4 sm:px-6 lg:px-8 text-center">
       <UserList userList={userList} />
       {searchParams.get("add_user") && <AddUserModal />}
+      <button
+        className="bg-blue-500 mt-3  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        onClick={() => navigate("/dashboard/?add_user=true")}
+      >
+        Add User
+      </button>
     </div>
   );
 };
