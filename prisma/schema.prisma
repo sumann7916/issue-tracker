@@ -10,19 +10,23 @@ datasource db {
 model User {
   id            String    @id @default(uuid())
   full_name     String    @db.VarChar(30)
-  username      String    @db.VarChar(20)
+  username      String    @db.VarChar(20)@unique
   password      String    @db.VarChar(100)
-  user_type     UserType
+  user_type     UserType  @default(USER)
+  createdAt     DateTime  @default(now())
 
   issues_assigned  Issue[] @relation("AssigneeUser")
   issues_reported  Issue[] @relation("ReporterUser")
+
+  @@index([username])
 }
 
 model Issue {
-  id            String    @id @default(uuid())
-  summary       String    @db.VarChar(100)
-  description   String    @db.VarChar(200)
-  status        StatusType
+  id            String      @id @default(uuid())
+  summary       String      @db.VarChar(100)
+  description   String      @db.VarChar(200)
+  status        StatusType  @default(TODO)
+  createdAt     DateTime  @default(now())
 
   assignee      User      @relation(name: "AssigneeUser", fields: [assigneeId], references: [id])
   assigneeId    String
