@@ -1,10 +1,11 @@
 import LoginForm from "~/components/LoginForm";
-import { ActionArgs } from "@remix-run/node";
+import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { signinValidator } from "../validators/signin.validator";
 import { validateUserAndGetUserId } from "../utils/login.utils";
 import { badRequest } from "../utils/request.server";
-import { createUserSession } from "../utils/createSession";
+import { createUserSession, getSession } from "../utils/createSession";
+import { getCurrentUser } from "~/auth/services/getCurrentUser";
 
 export async function action({ request }: ActionArgs) {
   const parseSignInInput = await signinValidator.validate(
@@ -27,6 +28,13 @@ export async function action({ request }: ActionArgs) {
     "/"
   );
 }
+
+export async function loader({ request }: LoaderArgs) {
+  if (await getCurrentUser(request)) {
+    return redirect("/");
+  }
+  return null;
+}
 export default function login() {
-  return <LoginForm />;
+  return <LoginForm />
 }

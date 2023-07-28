@@ -3,12 +3,12 @@ import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import AdminDashboard from "~/components/AdminDashboard";
 import { checkIfUsernameExists, createUser } from "~/users/services/createUser";
-import { getAllUser } from "~/users/services/getAllUser";
+import { getAdminAndUser } from "~/users/services/getAllUser";
 import { addUserValidator } from "~/users/validators/add-user.validator";
 import { badRequest } from "~/utils/request.server";
 
 export async function loader() {
-  return await getAllUser();
+  return await getAdminAndUser();
 }
 
 export async function action({ request }: ActionArgs) {

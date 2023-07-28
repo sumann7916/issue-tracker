@@ -10,8 +10,7 @@ export const zString = (field: string, minLength = 1, maxLength = 50) =>
   });
 
 export const userLoginSchema = z.object({
-  username: zString("username", 5, 20),
-  password: zString("password", 10, 100),
+  username: zString("username", 1, 20),
+  password: zString("password", 1, 100),
   user_type: z.enum(["ADMIN", "USER"]),
 });
-
