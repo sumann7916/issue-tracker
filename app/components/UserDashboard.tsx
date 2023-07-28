@@ -1,7 +1,14 @@
-import React from 'react'
+import { UserIdAndUsername } from "~/users/types/UserDetail";
+import CreateIssueForm from "./CreateIssueForm";
+import UserNavbar from "./UserNavbar";
 
-export default function UserDashboard() {
+const UserDashboard = ({ userList }: { userList: UserIdAndUsername[] }) => {
   return (
-    <div>UserDashboard</div>
-  )
-}
+    <>
+      <UserNavbar />
+      <CreateIssueForm userList={userList} />
+    </>
+  );
+};
+
+export default UserDashboard;

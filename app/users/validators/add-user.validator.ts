@@ -6,7 +6,7 @@ export const AddUserSchema = userLoginSchema
     confirm_password: zString("confirm_password", 10, 100),
     full_name: zString("fullname", 1, 30),
   })
-  .refine((schema) => !(schema.password === schema.confirm_password), {
+  .refine((schema) => schema.password !== schema.confirm_password, {
     message: "Password and Confirm Password do not match",
   });
 

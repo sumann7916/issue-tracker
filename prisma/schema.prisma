@@ -8,32 +8,59 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  full_name     String    @db.VarChar(30)
-  username      String    @db.VarChar(20)@unique
-  password      String    @db.VarChar(100)
-  user_type     UserType  @default(USER)
-  createdAt     DateTime  @default(now())
+  id                String    @id @default(uuid())
+  full_name         String    @db.VarChar(30)
+  username          String    @db.VarChar(20)@unique
+  password          String    @db.VarChar(100)
+  user_type         UserType  @default(USER)
+  created_at         DateTime  @default(now())
 
-  issues_assigned  Issue[] @relation("AssigneeUser")
-  issues_reported  Issue[] @relation("ReporterUser")
+  issues_assigned   Issue[] @relation("assignee_user")
+  issues_reported   Issue[] @relation("reporter_user")
 
-  @@index([username])
+  @@map("user")
+
 }
 
 model Issue {
-  id            String      @id @default(uuid())
-  summary       String      @db.VarChar(100)
-  description   String      @db.VarChar(200)
-  status        StatusType  @default(TODO)
-  createdAt     DateTime  @default(now())
+  id                String      @id @default(uuid())
+  summary           String      @db.VarChar(100)
+  description       String      @db.VarChar(200)
+  status            StatusType  @default(TODO)
+  created_at        DateTime    @default(now())
 
-  assignee      User      @relation(name: "AssigneeUser", fields: [assigneeId], references: [id])
-  assigneeId    String
+  assignee          User      @relation(name: "assignee_user", fields: [assignee_id], references: [id])
+  assignee_id        String
 
-  reporter      User      @relation(name: "ReporterUser", fields: [reporterId], references: [id])
-  reporterId    String
+  reporter          User      @relation(name: "reporter_user", fields: [reporter_id], references: [id])
+  reporter_id       String
+
+  issues_history    IssueHistory[] @relation("issue_issue_history")
+
+  @@map("issue")
 }
+
+
+model IssueHistory {
+  id                 String    @id @default(uuid())
+  modification_type  IssueModificationType
+  change_details     String     @db.VarChar(100) 
+  created_at         DateTime  @default(now())
+
+  issue             Issue     @relation(name: "issue_issue_history", fields: [issue_id], references: [id], onDelete: Cascade)
+  issue_id          String
+
+  @@index([issue_id])
+
+  @@map("issue_history")
+
+}
+
+enum IssueModificationType {
+  AssigneeChange
+  StatusChange
+}
+
 
 enum UserType {
   USER

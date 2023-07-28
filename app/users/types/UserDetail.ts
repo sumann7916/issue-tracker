@@ -6,7 +6,7 @@ export interface UserDetail {
   user_type: UserType;
 }
 
-export interface UserIdAndUsernameType {
+export interface UserIdAndUsername {
   username: string;
   id: string;
 }
