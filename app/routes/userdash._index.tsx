@@ -1,6 +1,8 @@
 import { UserType } from "@prisma/client";
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { useEffect, useState } from "react";
+import { useEventSource } from "remix-utils";
 import { validationError } from "remix-validated-form";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
 import Toast from "~/components/Toast";
@@ -39,6 +41,13 @@ export async function action({ request }: ActionArgs) {
 
 export default function userdash() {
   const data = useLoaderData() as UserIdAndUsername[];
+  let issue = useEventSource("issue/subscribe", {
+    event: "issue",
+  });
+  console.log(issue);
+  useEffect(() => {
+    console.log(issue);
+  }, [issue]);
   return (
     <>
       <UserDashboard userList={data} />

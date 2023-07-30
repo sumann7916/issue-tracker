@@ -52,7 +52,8 @@ export const createIssue = async ({
       issue_id: issue.id,
     },
   });
-  emitter.emit("issue_created", issue);
+  emitter.emit("issue", { message: "hi" });
+  console.log("being called");
   return issue;
 };
 
