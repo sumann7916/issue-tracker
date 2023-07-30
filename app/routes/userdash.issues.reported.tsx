@@ -1,6 +1,6 @@
 import { UserType } from "@prisma/client";
 import { LoaderArgs, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
 import IssueList from "~/components/IssueList";
 import UserNavbar from "~/components/UserNavbar";

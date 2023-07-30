@@ -1,11 +1,13 @@
 import { db } from "~/utils/db.server";
-import { CreateIssueData } from "../types/create-issue.type";
 import {
   SelectUserOptions,
   WhereUserOptions,
 } from "~/users/types/user-options";
 import { findOneUser } from "~/users/services/getAllUser";
 import { badRequest } from "~/utils/request.server";
+import { CreateIssueData } from "../types/issue.types";
+import { IssueModificationType } from "@prisma/client";
+import { emitter } from "~/emitter.server";
 
 export const createIssue = async ({
   summary,
@@ -27,9 +29,31 @@ export const createIssue = async ({
     assignee_id,
     reporter_id,
   };
-  return await db.issue.create({
+  const issue = await db.issue.create({
     data,
+    select: {
+      id: true,
+      reporter: {
+        select: {
+          username: true,
+        },
+      },
+      assignee: {
+        select: {
+          username: true,
+        },
+      },
+    },
   });
+  const issueHistory = await db.issueHistory.create({
+    data: {
+      modification_type: IssueModificationType.Creation,
+      change_details: `Issue Created By ${issue.reporter.username} and assigned to ${issue.assignee.username}`,
+      issue_id: issue.id,
+    },
+  });
+  emitter.emit("issue_created", issue);
+  return issue;
 };
 
 export const verifyAssignee = async (id: string) => {

@@ -3,9 +3,10 @@ import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { validationError } from "remix-validated-form";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
+import Toast from "~/components/Toast";
 import UserDashboard from "~/components/UserDashboard";
 import { createIssue } from "~/issue/services/createIssue";
-import { createIssueFormValidator } from "~/issue/validators/create-issue.validator";
+import { createIssueFormValidator } from "~/issue/validators/issue.validator";
 import { getAllUser } from "~/users/services/getAllUser";
 import { UserIdAndUsername } from "~/users/types/UserDetail";
 
@@ -27,6 +28,7 @@ export async function action({ request }: ActionArgs) {
     await request.formData()
   );
   if (parseAddIssueInput.error) {
+    console.log(parseAddIssueInput.submittedData);
     console.log(parseAddIssueInput.error);
     return validationError(parseAddIssueInput.error);
   }
@@ -36,6 +38,10 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function userdash() {
-  const data = useLoaderData<typeof loader>() as UserIdAndUsername[];
-  return <UserDashboard userList={data} />;
+  const data = useLoaderData() as UserIdAndUsername[];
+  return (
+    <>
+      <UserDashboard userList={data} />
+    </>
+  );
 }

@@ -59,6 +59,7 @@ model IssueHistory {
 enum IssueModificationType {
   AssigneeChange
   StatusChange
+  Creation
 }
 
 

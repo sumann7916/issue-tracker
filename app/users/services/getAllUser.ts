@@ -17,6 +17,12 @@ export const getAllUser = async () => {
     where: {
       user_type: UserType.USER,
     },
+    select: {
+      id: true,
+      full_name: true,
+      username: true,
+      user_type: true,
+    },
   });
 };
 
