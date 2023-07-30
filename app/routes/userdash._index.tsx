@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useEventSource } from "remix-utils";
 import { validationError } from "remix-validated-form";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
-import Toast from "~/components/Toast";
 import UserDashboard from "~/components/UserDashboard";
 import { createIssue } from "~/issue/services/createIssue";
 import { createIssueFormValidator } from "~/issue/validators/issue.validator";
@@ -18,7 +17,7 @@ export async function loader({ request }: LoaderArgs) {
     return redirect("/login");
   }
 
-  return await getAllUser();
+  return { users: await getAllUser(), userId: user.id }; // Include userId in the loader data
 }
 
 export async function action({ request }: ActionArgs) {
@@ -40,17 +39,21 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function userdash() {
-  const data = useLoaderData() as UserIdAndUsername[];
-  let issue = useEventSource("issue/subscribe", {
+  const data = useLoaderData() as {
+    users: UserIdAndUsername[];
+    userId: number;
+  }; // Retrieve the userId from the loader data
+  let issue = useEventSource(`issue/subscribe/${data.userId}`, {
     event: "issue",
   });
-  console.log(issue);
+  console.log(data.userId);
   useEffect(() => {
     console.log(issue);
   }, [issue]);
   return (
     <>
-      <UserDashboard userList={data} />
+      <UserDashboard userList={data.users} />{" "}
+      {/* Pass userList as data.users */}
     </>
   );
 }

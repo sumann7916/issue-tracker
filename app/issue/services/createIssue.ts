@@ -5,7 +5,7 @@ import {
 } from "~/users/types/user-options";
 import { findOneUser } from "~/users/services/getAllUser";
 import { badRequest } from "~/utils/request.server";
-import { CreateIssueData } from "../types/issue.types";
+import { CreateIssueData, IssueEvent } from "../types/issue.types";
 import { IssueModificationType } from "@prisma/client";
 import { emitter } from "~/emitter.server";
 
@@ -52,8 +52,9 @@ export const createIssue = async ({
       issue_id: issue.id,
     },
   });
-  emitter.emit("issue", { message: "hi" });
-  console.log("being called");
+  const event_url = `${IssueEvent.issue_created + "/" + assignee_id}`;
+  console.log(event_url);
+  emitter.emit(event_url, issue.reporter);
   return issue;
 };
 

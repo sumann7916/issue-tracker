@@ -64,3 +64,7 @@ export type UpdateIssueStatusInput = z.infer<typeof updateIssueStatusSchema>;
 export type UpdateIssueAssigneeInput = z.infer<
   typeof updateIssueAssigneeSchema
 >;
+
+export const IssueEvent = {
+  issue_created: "issue_created",
+};
