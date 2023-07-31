@@ -42,18 +42,18 @@ export default function userdash() {
   const data = useLoaderData() as {
     users: UserIdAndUsername[];
     userId: number;
-  }; // Retrieve the userId from the loader data
-  let issue = useEventSource(`issue/subscribe/${data.userId}`, {
-    event: "issue",
+  };
+  const event_url = `issue/subscribe/${data.userId}`;
+  let issue = useEventSource(event_url, {
+    event: "new-issue",
   });
-  console.log(data.userId);
   useEffect(() => {
     console.log(issue);
   }, [issue]);
   return (
     <>
+      <Toaster />
       <UserDashboard userList={data.users} />{" "}
-      {/* Pass userList as data.users */}
     </>
   );
 }

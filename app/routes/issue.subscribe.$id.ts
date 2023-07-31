@@ -15,11 +15,17 @@ export async function loader({ request, params }: LoaderArgs) {
   return eventStream(request.signal, function setup(send) {
     function handle(issue_reporter: string) {
       send({
-        event: "message",
+        event: "new-issue",
         data: issue_reporter,
       });
     }
-    emitter.on(event_url, handle);
+    emitter.on(event_url, () => {
+      console.log("someone connected");
+      send({
+        event: "new-issue",
+        data: new Date().toTimeString(),
+      });
+    });
 
     return function clear() {
       emitter.off(event_url, handle);

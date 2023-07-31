@@ -54,7 +54,8 @@ export const createIssue = async ({
   });
   const event_url = `${IssueEvent.issue_created + "/" + assignee_id}`;
   console.log(event_url);
-  emitter.emit(event_url, issue.reporter);
+  console.log(issue.reporter);
+  emitter.emit(event_url, issue.reporter.username);
   return issue;
 };
 
