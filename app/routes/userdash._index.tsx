@@ -2,6 +2,7 @@ import { UserType } from "@prisma/client";
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useEventSource } from "remix-utils";
 import { validationError } from "remix-validated-form";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
@@ -17,7 +18,7 @@ export async function loader({ request }: LoaderArgs) {
     return redirect("/login");
   }
 
-  return { users: await getAllUser(), userId: user.id }; // Include userId in the loader data
+  return { users: await getAllUser(), userId: user.id };
 }
 
 export async function action({ request }: ActionArgs) {
@@ -44,16 +45,17 @@ export default function userdash() {
     userId: number;
   };
   const event_url = `issue/subscribe/${data.userId}`;
-  let issue = useEventSource(event_url, {
+  let message = useEventSource(event_url, {
     event: "new-issue",
   });
   useEffect(() => {
-    console.log(issue);
-  }, [issue]);
+    if (message) {
+      toast(message);
+    }
+  }, [message]);
   return (
     <>
-      <Toaster />
-      <UserDashboard userList={data.users} />{" "}
+      <UserDashboard userList={data.users} />
     </>
   );
 }

@@ -14,18 +14,13 @@ export async function loader({ request, params }: LoaderArgs) {
   const event_url = `${IssueEvent.issue_created + "/" + params.id}`;
   return eventStream(request.signal, function setup(send) {
     function handle(issue_reporter: string) {
+      const date = new Date().toISOString();
       send({
         event: "new-issue",
-        data: issue_reporter,
+        data: `Issue Assigned to you by ${issue_reporter} at ${date}`,
       });
     }
-    emitter.on(event_url, () => {
-      console.log("someone connected");
-      send({
-        event: "new-issue",
-        data: new Date().toTimeString(),
-      });
-    });
+    emitter.on(event_url, handle);
 
     return function clear() {
       emitter.off(event_url, handle);
