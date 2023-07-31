@@ -1,6 +1,5 @@
 import { UserType } from "@prisma/client";
 import { createCookieSessionStorage, redirect } from "@remix-run/node";
-import { useEventSource } from "remix-utils";
 
 const sessionSecret = process.env.SESSION_SECRET ?? "sessionsecret";
 

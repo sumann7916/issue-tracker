@@ -9,10 +9,9 @@ const AdminDashboard = ({ userList }: { userList: UserDetail[] }) => {
   return (
     <div className="py-6 px-4 sm:px-6 lg:px-8 text-center">
       <UserList userList={userList} />
-      {searchParams.get("add_user") && <AddUserModal />}
       <button
         className="bg-blue-500 mt-3  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        onClick={() => navigate("/dashboard/?add_user=true")}
+        onClick={() => navigate("/admindashboard/add-user")}
       >
         Add User
       </button>

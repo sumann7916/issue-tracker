@@ -1,4 +1,5 @@
 import { UserType } from "@prisma/client";
+import { redirect } from "@remix-run/node";
 import { findOneUser } from "~/users/services/getAllUser";
 import {
   SelectUserOptions,
@@ -17,6 +18,8 @@ export const getCurrentUser = async (request: Request) => {
   if (!id || !user_type) {
     return null;
   }
+  //Connect user to event source
+  redirect(`issue/subscribe/${id}`);
   return await verifiedUser(id, user_type);
 };
 

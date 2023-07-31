@@ -1,27 +1,22 @@
 import LoginForm from "~/components/LoginForm";
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
-import { signinValidator } from "../validators/signin.validator";
 import { validateUserAndGetUserId } from "../utils/login.utils";
-import { badRequest } from "../utils/request.server";
 import { createUserSession } from "../utils/createSession";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
+import { siginServerValidator } from "~/auth/validators/signin.validator";
+import { UserNameAndId } from "~/users/types/user-type";
 
 export async function action({ request }: ActionArgs) {
-  const parseSignInInput = await signinValidator.validate(
+  const { data, error } = await siginServerValidator.validate(
     await request.formData()
   );
-  if (parseSignInInput.error) {
-    return validationError(parseSignInInput.error);
+  if (error) {
+    return validationError(error);
   }
+  //TODO not call this twice and use transform with zod
+  const userAndUserId = (await validateUserAndGetUserId(data)) as UserNameAndId;
 
-  const userAndUserId = await validateUserAndGetUserId(parseSignInInput.data);
-  if (!userAndUserId) {
-    return badRequest({
-      fieldErrors: null,
-      formError: "Username/Password combination is incorrect",
-    });
-  }
   return await createUserSession(
     userAndUserId.id,
     userAndUserId.user_type,

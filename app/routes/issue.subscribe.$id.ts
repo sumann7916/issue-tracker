@@ -1,9 +1,8 @@
-import { Issue } from "@prisma/client";
 import { LoaderArgs } from "@remix-run/node";
 import { eventStream } from "remix-utils";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
-import { emitter } from "~/emitter.server";
 import { IssueEvent } from "~/issue/types/issue.types";
+import { emitter } from "~/utils/emitter.server";
 
 export async function loader({ request, params }: LoaderArgs) {
   const user = await getCurrentUser(request);

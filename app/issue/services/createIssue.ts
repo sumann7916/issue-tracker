@@ -7,7 +7,7 @@ import { findOneUser } from "~/users/services/getAllUser";
 import { badRequest } from "~/utils/request.server";
 import { CreateIssueData, IssueEvent } from "../types/issue.types";
 import { IssueModificationType } from "@prisma/client";
-import { emitter } from "~/emitter.server";
+import { emitter } from "~/utils/emitter.server";
 
 export const createIssue = async ({
   summary,
