@@ -1,12 +1,32 @@
-# Welcome to Remix!
+# Welcome to Remi!
 
 - [Remix Docs](https://remix.run/docs)
+
+# Issue Tracker
+This repository contains a Remix-Typescript-Zod-Prisma issue tracker website which has two types of users: Admin and User. Admin have the ability to create users and User have ability to create and assign task/issues to other users as well as themselves.
+Forms are validated on client side as well as server side using zod-form-data library. 
+When an user is assigned a task, real time notification is sent to the user using Server Sent Events. Server Sent Events instead of Websockets due to no requirement of bidirectional communication.
+All the history of the changes made of an issue(i.e Status Change and Assignee is change) is tracked by creating a separate table and recording all events for update as well as create.
+
+### Future Improvements
+- Use of queue to notify users.
+- More secure way of authentication as well as use of OTP for user creation.
+- UI Improvements for good user experience
+
+
+
 
 ## Development
 
 From your terminal:
 
 ```sh
+cd docker/dev
+docker compose -f dev-db.compose.yml up -d
+cd ..
+cd ..
+npm i
+npx prisma db push
 npm run dev
 ```
 
@@ -56,3 +76,6 @@ rm -rf app
 # copy your app over
 cp -R ../my-old-remix-app/app app
 ```
+
+- Authors -[Suman Khadka](https://github.com/sumann7916)
+
