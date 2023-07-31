@@ -10,7 +10,7 @@ const IssueComponent: React.FC<IssueProps> = ({ issue }) => {
   const navigate = useNavigate();
   const handleIssueClick = () => {
     const { id } = issue;
-    navigate(`/userdash/issues/${id}`);
+    navigate(`/userdashboard/issues/${id}`);
   };
   return (
     <tr key={issue.id} onClick={handleIssueClick} style={{ cursor: "pointer" }}>

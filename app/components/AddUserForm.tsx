@@ -1,88 +1,31 @@
-import { Form } from "@remix-run/react";
+import { ValidatedForm } from "remix-validated-form";
 import { userTypeList } from "~/users/types/user-type";
+import { addUserClientValidator } from "~/users/validators/add-user.validator";
+import { FormInput } from "./FormInput";
+import { FormSelect } from "./FormSelect";
+import { SubmitButton } from "./SubmitButton";
 
 export default function AddUserForm() {
   return (
-    <div
-      className="rounded-xl bg-white shadow-lg p-6"
-      style={{ width: "20rem" }}
-    >
-      <Form method="post">
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
-          >
-            Username
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            name="username"
-            placeholder="Enter username"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Enter password"
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="confirm_password"
-          >
-            Confirm Password
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="confirm_password"
-            type="password"
+    <ValidatedForm validator={addUserClientValidator} method="post">
+      <div className="flex h-screen justify-center items-center bg-gray-100">
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-1/4">
+          <FormInput name="username" label="username" />
+          <FormInput name="full_name" label="Full Name" />
+          <FormInput name="password" label="password" type="password" />
+          <FormInput
             name="confirm_password"
-            placeholder="Confirm password"
+            label="Confirm Password"
+            type="password"
           />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="userType"
-          >
-            User Type
-          </label>
-          <select
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="userType"
+          <FormSelect
+            label="User Type"
             name="user_type"
-          >
-            {userTypeList.map((userType) => (
-              <option key={userType} value={userType}>
-                {userType}
-              </option>
-            ))}
-          </select>
+            options={userTypeList}
+          />
+          <SubmitButton />
         </div>
-
-        <div className="flex items-center justify-center mt-6">
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Create User
-          </button>
-        </div>
-      </Form>
-    </div>
+      </div>
+    </ValidatedForm>
   );
 }

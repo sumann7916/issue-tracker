@@ -1,4 +1,5 @@
 import { UserType } from "@prisma/client";
+import { redirect } from "@remix-run/node";
 import { findOneUser } from "~/users/services/getAllUser";
 import {
   SelectUserOptions,
@@ -17,11 +18,17 @@ export const getCurrentUser = async (request: Request) => {
   if (!id || !user_type) {
     return null;
   }
+  //Connect user to event source
+  redirect(`issue/subscribe/${id}`);
   return await verifiedUser(id, user_type);
 };
 
 export const verifiedUser = async (id: string, user_type: UserType) => {
   const where: WhereUserOptions = { id, user_type };
-  const select: SelectUserOptions = { id: true, user_type: true };
+  const select: SelectUserOptions = {
+    id: true,
+    user_type: true,
+    username: true,
+  };
   return await findOneUser(where, select);
 };

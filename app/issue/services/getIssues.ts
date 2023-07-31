@@ -1,5 +1,6 @@
 import { db } from "~/utils/db.server";
 import { toIssueWithDetailsDto } from "~/utils/helpers";
+import { WhereIssueOptions } from "../types/issue.types";
 
 //Get Assigned or Reported. Assigned by default
 export const getIssues = async (id: string, assigned = true) => {
@@ -14,11 +15,13 @@ export const getIssues = async (id: string, assigned = true) => {
       status: true,
       reporter: {
         select: {
+          id: true,
           username: true,
         },
       },
       assignee: {
         select: {
+          id: true,
           username: true,
         },
       },
@@ -27,13 +30,21 @@ export const getIssues = async (id: string, assigned = true) => {
   return issues.map(toIssueWithDetailsDto);
 };
 
-export const findOneIssue = async (id?: string) => {
+export const findOneIssue = async (user_id: string, id?: string) => {
   if (!id) {
     return null;
   }
   const issue = await db.issue.findUnique({
     where: {
       id,
+      OR: [
+        {
+          reporter_id: user_id,
+        },
+        {
+          assignee_id: user_id,
+        },
+      ],
     },
     select: {
       id: true,
@@ -44,11 +55,13 @@ export const findOneIssue = async (id?: string) => {
       reporter: {
         select: {
           username: true,
+          id: true,
         },
       },
       assignee: {
         select: {
           username: true,
+          id: true,
         },
       },
     },
@@ -75,3 +88,9 @@ export const getIssueHistory = async (issue_id?: string) => {
     },
   });
 };
+
+export async function findReportedIssue(id: string, user_id: string) {
+  return await db.issue.findUnique({
+    where: { id, reporter_id: user_id },
+  });
+}

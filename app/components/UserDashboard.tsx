@@ -2,7 +2,7 @@ import { UserIdAndUsername } from "~/users/types/UserDetail";
 import CreateIssueForm from "./CreateIssueForm";
 import UserNavbar from "./UserNavbar";
 
-const UserDashboard = ({ userList }: { userList: UserIdAndUsername[] }) => {
+const UserDashboard = ({ userList }: { userList: string[] }) => {
   return (
     <>
       <UserNavbar />

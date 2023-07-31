@@ -13,4 +13,6 @@ export const toIssueWithDetailsDto = (
   status: issue.status,
   reporter: issue.reporter.username,
   assignee: issue.assignee.username,
+  reporter_id: issue.reporter.id,
+  assignee_id: issue.assignee.id,
 });
