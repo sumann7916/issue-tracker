@@ -88,3 +88,9 @@ export const getIssueHistory = async (issue_id?: string) => {
     },
   });
 };
+
+export async function findReportedIssue(id: string, user_id: string) {
+  return await db.issue.findUnique({
+    where: { id, reporter_id: user_id },
+  });
+}

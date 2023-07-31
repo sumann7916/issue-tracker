@@ -1,53 +1,39 @@
-import { Form } from "@remix-run/react";
-import React, { useState } from "react";
+import { FC } from "react";
+import { ValidatedForm } from "remix-validated-form";
+import { IssueStatusTypeList } from "~/issue/types/issue.types";
+import { FormSelect } from "./FormSelect";
+import { SubmitButton } from "./SubmitButton";
+import { updateIssueClientValidator } from "~/issue/validators/issue.validator";
 
-type EditFormProps = {
-  formTitle: string;
-  optionsList: string[];
-  id: string;
-  name: string;
+type EditIssueFormProps = {
+  isAssignee: boolean;
+  isReporter: boolean;
+  userList: string[];
 };
-
-const EditForm: React.FC<EditFormProps> = ({
-  formTitle,
-  optionsList,
-  id,
-  name,
+export const EditIssueForm: FC<EditIssueFormProps> = ({
+  isReporter,
+  isAssignee,
+  userList,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(optionsList[0]);
-
-  const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(e.target.value);
-  };
-
   return (
-    <Form method="post">
-      <div className="flex items-center mb-4">
-        <label className="mr-2 text-gray-700 font-semibold" htmlFor={id}>
-          {formTitle}:
-        </label>
-        <select
-          className="border rounded-md py-2 px-3 text-gray-700"
-          id={id}
-          name={name}
-          value={selectedOption}
-          onChange={handleOptionChange}
-        >
-          {optionsList.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+    <ValidatedForm validator={updateIssueClientValidator} method="post">
+      <div className="flex h-screen justify-center items-center bg-gray-100">
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-1/4">
+          {isAssignee && (
+            <FormSelect
+              name="status"
+              label="Status"
+              options={IssueStatusTypeList}
+            />
+          )}
+          {isReporter && (
+            <FormSelect name="assignee" label="Assignee" options={userList} />
+          )}
+          <SubmitButton />
+        </div>
       </div>
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md"
-      >
-        OK
-      </button>
-    </Form>
+    </ValidatedForm>
   );
 };
 
-export default EditForm;
+export default EditIssueForm;

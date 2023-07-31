@@ -1,4 +1,4 @@
-import { StatusType, UserType } from "@prisma/client";
+import { IssueModificationType, StatusType, UserType } from "@prisma/client";
 import {
   createIssueFormSchema,
   updateIssueAssigneeSchema,
@@ -34,18 +34,6 @@ export type IssueWithNestedUsers = {
   };
 };
 
-export interface WhereIssueOptions {
-  id: string;
-  reporter?: {
-    id: string;
-    user_type: UserType;
-  };
-  assignee?: {
-    id: string;
-    user_type: UserType;
-  };
-}
-
 export const EditIssueActionType = {
   UPDATE_ASSIGNEE: "UPDATE_ASSIGNEE",
   UPDATE_STATUS: "UPDATE_STATUS",
@@ -56,7 +44,7 @@ export const IssueStatusTypeList = Object.values(StatusType);
 export type CreateIssueFormInput = z.infer<typeof createIssueFormSchema>;
 
 export type CreateIssueData = CreateIssueFormInput & {
-  reporter_id: string;
+  reporter: string;
 };
 
 export type UpdateIssueStatusInput = z.infer<typeof updateIssueStatusSchema>;
@@ -67,4 +55,40 @@ export type UpdateIssueAssigneeInput = z.infer<
 
 export const IssueEvent = {
   issue_created: "issue_created",
+};
+
+export type UpdateIssueDto = {
+  id: string;
+  userId: string;
+  assignee?: string;
+  status?: StatusType;
+};
+
+export type WhereIssueOptions = {
+  id: string;
+  reporter_id?: string;
+  assignee_id?: string;
+};
+
+export type IssueDataOptions = {
+  assignee?: {
+    connect: {
+      username: string;
+    };
+  };
+  status?: StatusType;
+  issue_history: {
+    create: {
+      modification_type: IssueModificationType;
+      change_details: string;
+    }[];
+  };
+};
+
+export type IssueWithAssignee = {
+  id: string;
+  status: StatusType;
+  assignee: {
+    username: string;
+  };
 };

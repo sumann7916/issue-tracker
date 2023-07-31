@@ -8,7 +8,7 @@ const UserNavbar = () => {
         <button
           className="mr-4"
           onClick={() => {
-            navigate("/userdash");
+            navigate("/userdashboard");
           }}
         >
           Add Issue
@@ -16,7 +16,7 @@ const UserNavbar = () => {
         <button
           className="mr-4"
           onClick={() => {
-            navigate("/userdash/issues/assigned");
+            navigate("/userdashboard/issues/assigned");
           }}
         >
           Assigned Issues
@@ -25,14 +25,20 @@ const UserNavbar = () => {
         <button
           className="mr-4"
           onClick={() => {
-            navigate("/userdash/issues/reported");
+            navigate("/userdashboard/issues/reported");
           }}
         >
           Reported Issues
         </button>
       </div>
       <div className="flex items-center">
-        <button>Logout</button>
+        <button
+          onClick={() => {
+            navigate("/logout");
+          }}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );

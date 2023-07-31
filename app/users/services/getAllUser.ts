@@ -35,3 +35,18 @@ export const findOneUser = async (
     select,
   });
 };
+
+export const getAllUserName = async () =>
+  toUsernameList(
+    await db.user.findMany({
+      where: {
+        user_type: UserType.USER,
+      },
+      select: {
+        username: true,
+      },
+    })
+  );
+
+const toUsernameList = (users: { username: string }[]) =>
+  users.map((user) => user.username);

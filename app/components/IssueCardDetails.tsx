@@ -13,9 +13,6 @@ const IssueCardDetails: React.FC<{
   return (
     <div className="bg-white shadow-lg rounded-lg p-4">
       <div className="flex justify-between items-center mb-4">
-        {searchParams.get("edit_issue") && (
-          <EditIssueModal editStatus={issue.assignee_id === user_id} />
-        )}
         {searchParams.get("delete_issue") && <IssueDeleteModal />}
 
         <h2 className="text-xl font-semibold">{issue.summary}</h2>
@@ -23,7 +20,7 @@ const IssueCardDetails: React.FC<{
           <button
             className="text-blue-500 font-semibold"
             onClick={() => {
-              navigate("?edit_issue=true");
+              navigate("edit");
             }}
           >
             Edit

@@ -1,47 +1,27 @@
-import { UserType } from "@prisma/client";
+import { User, UserType } from "@prisma/client";
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useEventSource } from "remix-utils";
 import { validationError } from "remix-validated-form";
+import { createIssueAction } from "~/actions/createIssue.action";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
 import UserDashboard from "~/components/UserDashboard";
 import { createIssue } from "~/issue/services/createIssue";
-import { createIssueFormValidator } from "~/issue/validators/issue.validator";
-import { getAllUser } from "~/users/services/getAllUser";
-import { UserIdAndUsername } from "~/users/types/UserDetail";
+import {
+  createIssueClientValidator,
+  createIssueServerValidator,
+} from "~/issue/validators/issue.validator";
+import { userDashboardloader } from "~/loader/userDashboard.loader";
+import { getAllUserName } from "~/users/services/getAllUser";
 
-export async function loader({ request }: LoaderArgs) {
-  const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-
-  return { users: await getAllUser(), userId: user.id };
-}
-
-export async function action({ request }: ActionArgs) {
-  const user = await getCurrentUser(request);
-  if (!user) {
-    return redirect("/login");
-  }
-  const parseAddIssueInput = await createIssueFormValidator.validate(
-    await request.formData()
-  );
-  if (parseAddIssueInput.error) {
-    console.log(parseAddIssueInput.submittedData);
-    console.log(parseAddIssueInput.error);
-    return validationError(parseAddIssueInput.error);
-  }
-
-  await createIssue({ ...parseAddIssueInput.data, reporter_id: user.id });
-  return redirect("/userdash");
-}
+export const loader = async (args: LoaderArgs) => userDashboardloader(args);
+export const action = async (args: ActionArgs) => createIssueAction(args);
 
 export default function userdash() {
   const data = useLoaderData() as {
-    users: UserIdAndUsername[];
+    users: string[];
     userId: number;
   };
   const event_url = `issue/subscribe/${data.userId}`;

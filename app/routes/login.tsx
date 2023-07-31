@@ -6,30 +6,12 @@ import { createUserSession } from "../utils/createSession";
 import { getCurrentUser } from "~/auth/services/getCurrentUser";
 import { siginServerValidator } from "~/auth/validators/signin.validator";
 import { UserNameAndId } from "~/users/types/user-type";
+import { loginAction } from "~/actions/login.action";
+import { verifyUserLoader } from "~/loader/verifyUser.loader";
 
-export async function action({ request }: ActionArgs) {
-  const { data, error } = await siginServerValidator.validate(
-    await request.formData()
-  );
-  if (error) {
-    return validationError(error);
-  }
-  //TODO not call this twice and use transform with zod
-  const userAndUserId = (await validateUserAndGetUserId(data)) as UserNameAndId;
+export const action = async (args: ActionArgs) => loginAction(args);
 
-  return await createUserSession(
-    userAndUserId.id,
-    userAndUserId.user_type,
-    "/"
-  );
-}
-
-export async function loader({ request }: LoaderArgs) {
-  if (await getCurrentUser(request)) {
-    return redirect("/");
-  }
-  return null;
-}
+export const loader = async (args: LoaderArgs) => verifyUserLoader(args);
 export default function login() {
   return <LoginForm />;
 }

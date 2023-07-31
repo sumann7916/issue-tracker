@@ -1,19 +1,11 @@
-import { UserType } from "@prisma/client";
-import { LoaderArgs, redirect } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
-import { getCurrentUser } from "~/auth/services/getCurrentUser";
+import { LoaderArgs } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import IssueList from "~/components/IssueList";
 import UserNavbar from "~/components/UserNavbar";
-import { getIssues } from "~/issue/services/getIssues";
+import { getReportedIssuesLoader } from "~/loader/getReportedIssues.loader";
 
-export async function loader({ request }: LoaderArgs) {
-  const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-  return await getIssues(user.id, false);
-}
-
+export const loader = async (args: LoaderArgs) =>
+  await getReportedIssuesLoader(args);
 export default function UserdashIssuesReported() {
   const data = useLoaderData();
   return (

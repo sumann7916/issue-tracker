@@ -25,6 +25,10 @@ export const getCurrentUser = async (request: Request) => {
 
 export const verifiedUser = async (id: string, user_type: UserType) => {
   const where: WhereUserOptions = { id, user_type };
-  const select: SelectUserOptions = { id: true, user_type: true };
+  const select: SelectUserOptions = {
+    id: true,
+    user_type: true,
+    username: true,
+  };
   return await findOneUser(where, select);
 };

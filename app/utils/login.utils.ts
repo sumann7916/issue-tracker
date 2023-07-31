@@ -1,7 +1,6 @@
 import * as argon2 from "argon2";
 import { db } from "./db.server";
 import { SignInputType } from "~/users/types/signIn.type";
-import { redirect } from "@remix-run/node";
 
 export const hashPassword = async (passwordString: string) => {
   return await argon2.hash(passwordString);
