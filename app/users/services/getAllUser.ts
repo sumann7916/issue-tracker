@@ -1,6 +1,6 @@
 import { UserType } from "@prisma/client";
 import { db } from "~/utils/db.server";
-import { SelectUserOptions, WhereUserOptions } from "../types/user-options";
+import { WhereUserOptions, SelectUserOptions } from "../types/user.types";
 
 export const getAdminAndUser = async () => {
   return await db.user.findMany({

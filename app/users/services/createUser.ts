@@ -1,5 +1,5 @@
 import { db } from "~/utils/db.server";
-import { AddUserDto } from "../types/addUser.type";
+import { AddUserDto } from "../types/user.types";
 
 export const createUser = async ({ confirm_password, ...data }: AddUserDto) => {
   await db.user.create({ data });

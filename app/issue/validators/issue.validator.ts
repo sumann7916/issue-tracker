@@ -3,14 +3,10 @@ import { z } from "zod";
 import { zString } from "~/common/types/z.schema";
 import { StatusType } from "@prisma/client";
 import {
-  verifyAssignee,
   verifyAssigneeUsername,
 } from "../services/createIssue";
-import {
-  SelectUserOptions,
-  WhereUserOptions,
-} from "~/users/types/user-options";
 import { findOneUser } from "~/users/services/getAllUser";
+import { WhereUserOptions, SelectUserOptions } from "~/users/types/user.types";
 
 export const createIssueFormSchema = z.object({
   summary: zString("summary", 10, 100),
@@ -39,11 +35,7 @@ export const updateIssueSchema = z
   })
   .refine(
     (data) => {
-      if (!data.assignee && !data.status) {
-        return false;
-      }
-      return true;
-      // return !(!data.assignee && !data.status);
+      return !(!data.assignee && !data.status);
     },
 
     {

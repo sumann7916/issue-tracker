@@ -1,4 +1,3 @@
-import { UserType } from "@prisma/client";
 import { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import IssueList from "~/components/IssueList";

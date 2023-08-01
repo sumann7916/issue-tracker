@@ -1,7 +1,6 @@
+import { UserDetail } from "~/users/types/user.types";
 import UserList from "./UserList";
 import { useNavigate, useSearchParams } from "@remix-run/react";
-import AddUserModal from "./AddUserModal";
-import { UserDetail } from "~/users/types/UserDetail";
 
 const AdminDashboard = ({ userList }: { userList: UserDetail[] }) => {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import { ActionArgs } from "@remix-run/node";
 import { validationError } from "remix-validated-form";
 import { siginServerValidator } from "~/auth/validators/signin.validator";
-import { UserNameAndId } from "~/users/types/user-type";
+import { UserNameAndId } from "~/users/types/user.types";
 import { createUserSession } from "~/utils/createSession";
 import { validateUserAndGetUserId } from "~/utils/login.utils";
 

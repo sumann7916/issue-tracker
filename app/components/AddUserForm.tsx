@@ -1,9 +1,9 @@
 import { ValidatedForm } from "remix-validated-form";
-import { userTypeList } from "~/users/types/user-type";
 import { addUserClientValidator } from "~/users/validators/add-user.validator";
 import { FormInput } from "./FormInput";
 import { FormSelect } from "./FormSelect";
 import { SubmitButton } from "./SubmitButton";
+import { userTypeList } from "~/users/types/user.types";
 
 export default function AddUserForm() {
   return (

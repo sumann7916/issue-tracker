@@ -1,4 +1,4 @@
-import { IssueModificationType, StatusType, UserType } from "@prisma/client";
+import { IssueModificationType, StatusType } from "@prisma/client";
 import {
   createIssueFormSchema,
   updateIssueAssigneeSchema,

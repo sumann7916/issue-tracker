@@ -1,7 +1,6 @@
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import React from "react";
 import { IssueWithReporterAndAssignee } from "~/issue/types/issue.types";
-import { EditIssueModal } from "./EditIssueModal";
 import { IssueDeleteModal } from "./IssueDeleteModal";
 
 const IssueCardDetails: React.FC<{

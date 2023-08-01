@@ -1,11 +1,8 @@
-import { LoaderArgs, redirect } from "@remix-run/node";
+import { LoaderArgs } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-
-import { getCurrentUser } from "~/auth/services/getCurrentUser";
 import AdminDashboard from "~/components/AdminDashboard";
 import { getAdminAndUserLoader } from "~/loader/getAdminAndUser.loader";
-import { getAdminAndUser } from "~/users/services/getAllUser";
-import { UserDetail } from "~/users/types/UserDetail";
+import { UserDetail } from "~/users/types/user.types";
 
 export const loader = async (args: LoaderArgs) => getAdminAndUserLoader(args);
 

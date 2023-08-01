@@ -1,12 +1,10 @@
 import { db } from "~/utils/db.server";
-import {
-  SelectUserOptions,
-  WhereUserOptions,
-} from "~/users/types/user-options";
 import { findOneUser } from "~/users/services/getAllUser";
 import { CreateIssueData, IssueEvent } from "../types/issue.types";
 import { IssueModificationType } from "@prisma/client";
 import { emitter } from "~/utils/emitter.server";
+import { WhereUserOptions, SelectUserOptions } from "~/users/types/user.types";
+
 
 export const createIssue = async (createIssueData: CreateIssueData) => {
   const issue = await db.issue.create({

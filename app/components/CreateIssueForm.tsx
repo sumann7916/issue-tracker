@@ -1,7 +1,5 @@
-import { Form } from "@remix-run/react";
 import { ValidatedForm } from "remix-validated-form";
 import { createIssueClientValidator } from "~/issue/validators/issue.validator";
-import { UserIdAndUsername } from "~/users/types/UserDetail";
 import { FormInput } from "./FormInput";
 import { SubmitButton } from "./SubmitButton";
 import { FormSelect } from "./FormSelect";
