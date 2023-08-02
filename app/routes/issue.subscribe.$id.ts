@@ -7,13 +7,13 @@ import { emitter } from "~/utils/emitter.server";
 export async function loader({ request, params }: LoaderArgs) {
   const user = await getCurrentUser(request);
   if (!user || user.id !== params.id) {
-    console.log("No user");
     return null;
   }
-  const event_url = `${IssueEvent.issue_created + "/" + params.id}`;
+  const event_url = `${IssueEvent.issue_created + "/" + user.id}`;
   return eventStream(request.signal, function setup(send) {
     function handle(issue_reporter: string) {
       const date = new Date().toISOString();
+      console.log(date);
       send({
         event: "new-issue",
         data: `Issue Assigned to you by ${issue_reporter} at ${date}`,

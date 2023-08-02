@@ -11,3 +11,4 @@ export async function loader({ request }: LoaderArgs) {
   }
   return await getAllUserName();
 }
+

@@ -1,10 +1,7 @@
 import { UserType } from "@prisma/client";
 import { redirect } from "@remix-run/node";
 import { findOneUser } from "~/users/services/getAllUser";
-import {
-  SelectUserOptions,
-  WhereUserOptions,
-} from "~/users/types/user-options";
+import { SelectUserOptions, WhereUserOptions } from "~/users/types/user.types";
 import { getSession } from "~/utils/createSession";
 
 export const getUserSession = async (request: Request) => {
@@ -18,9 +15,13 @@ export const getCurrentUser = async (request: Request) => {
   if (!id || !user_type) {
     return null;
   }
+  const user = await verifiedUser(id, user_type);
+  if (!user) {
+    return null;
+  }
   //Connect user to event source
-  redirect(`issue/subscribe/${id}`);
-  return await verifiedUser(id, user_type);
+  redirect(`issue/subscribe/${user.id}`);
+  return user;
 };
 
 export const verifiedUser = async (id: string, user_type: UserType) => {
