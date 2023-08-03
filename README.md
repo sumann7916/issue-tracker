@@ -8,6 +8,9 @@ Forms are validated on client side as well as server side using zod-form-data li
 When an user is assigned a task, real time notification is sent to the user using Server Sent Events. Server Sent Events instead of Websockets due to no requirement of bidirectional communication.
 All the history of the changes made of an issue(i.e Status Change and Assignee is change) is tracked by creating a separate table and recording all events for update as well as create.
 
+![sse-example](https://github.com/sumann7916/issue-tracker/assets/62978690/4d5a382d-0626-492a-9e8e-794134a4f6cd)
+
+
 ### Future Improvements
 - Use of queue to notify users.
 - More secure way of authentication as well as use of OTP for user creation.
