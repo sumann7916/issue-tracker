@@ -1,9 +1,10 @@
-import * as argon2 from "argon2";
 import { db } from "./db.server";
 import { SignInputType } from "~/users/types/signIn.type";
+import * as bcrypt from "bcryptjs";
 
 export const hashPassword = async (passwordString: string) => {
-  return await argon2.hash(passwordString);
+  const salt = await bcrypt.genSalt(10);
+  return await bcrypt.hash(passwordString, salt);
 };
 
 export const validateUserAndGetUserId = async ({
@@ -22,7 +23,7 @@ export const validateUserAndGetUserId = async ({
       password: true,
     },
   });
-  if (user && (await argon2.verify(user.password, password))) {
+  if (user && (await bcrypt.compare(password, user.password))) {
     return {
       id: user.id,
       user_type,

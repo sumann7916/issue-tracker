@@ -7,17 +7,16 @@ import { createIssueServerValidator } from "~/issue/validators/issue.validator";
 
 export async function createIssueAction({ request }: ActionArgs) {
   const user = (await getCurrentUser(request)) as User;
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-  const { data, error } = await createIssueServerValidator.validate(
-    await request.formData()
-  );
+  return user?.user_type !== UserType.USER
+    ? redirect("/login")
+    : await validateAndCreateIssue(await request.formData(), user.username);
+}
 
+const validateAndCreateIssue = async (formData: FormData, reporter: string) => {
+  const { data, error } = await createIssueServerValidator.validate(formData);
   if (error) {
     return validationError(error);
   }
-
-  const issue = await createIssue({ ...data, reporter: user.username });
+  const issue = await createIssue({ ...data, reporter });
   return redirect(`/userdashboard/issues/${issue.id}`);
-}
+};

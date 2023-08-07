@@ -7,12 +7,13 @@ import { addUserServerValidator } from "~/users/validators/add-user.validator";
 
 export const createUserAction = async ({ request }: ActionArgs) => {
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.ADMIN) {
-    return redirect("/login");
-  }
-  const { data, error } = await addUserServerValidator.validate(
-    await request.formData()
-  );
+  return user?.user_type === UserType.ADMIN
+    ? await validateAndCreateUser(await request.formData())
+    : redirect("/login");
+};
+
+const validateAndCreateUser = async (formData: FormData) => {
+  const { data, error } = await addUserServerValidator.validate(formData);
   if (error) {
     return validationError(error);
   }

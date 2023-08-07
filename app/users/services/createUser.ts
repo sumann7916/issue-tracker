@@ -1,8 +1,19 @@
 import { db } from "~/utils/db.server";
 import { AddUserDto } from "../types/addUser.type";
+import { hashPassword } from "~/utils/login.utils";
 
-export const createUser = async ({ confirm_password, ...data }: AddUserDto) => {
-  await db.user.create({ data });
+export const createUser = async ({
+  confirm_password,
+  password,
+  ...data
+}: AddUserDto) => {
+  const hashedPassword = await hashPassword(password);
+  await db.user.create({
+    data: {
+      ...data,
+      password: hashedPassword,
+    },
+  });
 };
 
 export const checkIfUsernameExists = async (username: string) => {
