@@ -1,5 +1,5 @@
 import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
-import { createUserAction } from "~/actions/createUser.action";
+import { createUserAction } from "~/actions/admin/createUser.action";
 import AddUserForm from "~/components/AddUserForm";
 import AdminNavbar from "~/components/AdminNavbar";
 import { verifyAdminLoader } from "~/loader/verifyAdmin.loader";

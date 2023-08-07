@@ -10,14 +10,14 @@ export const loader = async (args: LoaderArgs) => getIssueDetailsLoader(args);
 export const action = async (args: ActionArgs) => deleteIssueAction(args);
 export default function IssueDetails() {
   const { issue, issueHistory, user } = useLoaderData();
-  if (!issue) {
-    return "Issue Does not exist";
-  }
-  return (
+
+  return issue ? (
     <>
       <UserNavbar />
       <IssueCardDetails issue={issue} user_id={user.id} />
       <IssueHistoryTable histories={issueHistory} />
     </>
+  ) : (
+    `Issue does not exist`
   );
 }

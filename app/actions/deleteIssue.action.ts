@@ -5,15 +5,17 @@ import { deleteIssue } from "~/issue/services/deleteIssue";
 
 export async function deleteIssueAction({ request, params }: LoaderArgs) {
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-  if (!params.id) {
+  return user?.user_type !== UserType.USER
+    ? redirect("/login")
+    : validateAndDeleteIssue(user.id, params.id);
+}
+
+const validateAndDeleteIssue = async (userId: string, issueId?: string) => {
+  if (!issueId) {
     return new Response("Issue does not exist");
   }
-  const issue = await deleteIssue(params.id, user.id);
-  if (!issue) {
-    return new Response("Issue Not found");
-  }
-  return redirect("/userdashboard");
-}
+  const issue = await deleteIssue(issueId, userId);
+  return issue
+    ? redirect("/userdashboard")
+    : new Response("Issue does not exist");
+};

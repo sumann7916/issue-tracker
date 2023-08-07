@@ -6,10 +6,12 @@ import { getAllUserName } from "~/users/services/getAllUser";
 
 export async function updateIssueloader({ request, params }: LoaderArgs) {
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/");
-  }
-  const issue = await findOneIssue(user.id, params.id);
-  const userList = await getAllUserName();
-  return { issue, userList, userId: user.id };
+
+  return user?.user_type !== UserType.USER
+    ? redirect("/")
+    : {
+        issue: await findOneIssue(user.id, params.id),
+        userList: await getAllUserName(),
+        userId: user.id,
+      };
 }

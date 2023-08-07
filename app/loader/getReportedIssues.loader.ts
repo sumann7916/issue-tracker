@@ -5,8 +5,7 @@ import { getIssues } from "~/issue/services/getIssues";
 
 export async function getReportedIssuesLoader({ request }: LoaderArgs) {
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-  return await getIssues(user.id, false);
+  return user?.user_type !== UserType.USER
+    ? redirect("/login")
+    : await getIssues(user.id, false);
 }

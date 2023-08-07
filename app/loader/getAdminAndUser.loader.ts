@@ -5,8 +5,7 @@ import { getAdminAndUser } from "~/users/services/getAllUser";
 
 export async function getAdminAndUserLoader({ request }: LoaderArgs) {
   const user = await getCurrentUser(request);
-  if (user?.user_type !== UserType.ADMIN) {
-    return redirect("/login");
-  }
-  return await getAdminAndUser();
+  return user?.user_type !== UserType.ADMIN
+    ? redirect("/login")
+    : await getAdminAndUser();
 }

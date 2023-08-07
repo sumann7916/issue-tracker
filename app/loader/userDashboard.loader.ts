@@ -5,8 +5,11 @@ import { getAllUserName } from "~/users/services/getAllUser";
 
 export async function userDashboardloader({ request }: LoaderArgs) {
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/login");
-  }
-  return { users: await getAllUserName(), userId: user.id };
+
+  return user?.user_type !== UserType.USER
+    ? redirect("/login")
+    : {
+        users: await getAllUserName(),
+        userId: user.id,
+      };
 }

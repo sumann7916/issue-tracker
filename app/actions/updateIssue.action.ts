@@ -7,26 +7,32 @@ import { updateIssueServerValidator } from "~/issue/validators/issue.validator";
 
 export async function updateIssueAction({ request, params }: LoaderArgs) {
   if (!params.id) {
-    return "error updating Data";
+    return new Response("Error Updating Data");
   }
+
   const user = await getCurrentUser(request);
-  if (!user || user.user_type !== UserType.USER) {
-    return redirect("/");
-  }
-  const result = await updateIssueServerValidator.validate(
-    await request.formData()
-  );
-  if (result.error) {
-    return validationError(result.error);
+  return user?.user_type !== UserType.USER
+    ? redirect("/")
+    : validateAndUpdateIssue(await request.formData(), params.id, user.id);
+}
+
+
+const validateAndUpdateIssue = async (
+  formData: FormData,
+  id: string,
+  userId: string
+) => {
+  const { data, error } = await updateIssueServerValidator.validate(formData);
+  if (error) {
+    return validationError(error);
   }
   const issue = await updateIssue({
-    id: params.id,
-    userId: user.id,
-    assignee: result.data.assignee,
-    status: result.data.status,
+    id,
+    userId,
+    assignee: data.assignee,
+    status: data.status,
   });
-  if (!issue) {
-    return new Response("Something went wrong");
-  }
-  return redirect(`/userdashboard/issues/${params.id}`);
-}
+  return issue
+    ? redirect(`/userdashboard/issues/${id}`)
+    : new Response(`Something went wrong`);
+};
