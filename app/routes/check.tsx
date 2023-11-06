@@ -2,16 +2,22 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSubmit } from "@remix-run/react";
-import { ActionArgs } from "@remix-run/node";
+import { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { generateFormFromZod } from "~/components/ZodForm";
 
-export async function action() {
-  console.log("I was called");
+export async function action({ request }: ActionArgs) {
+  console.log(request.json());
+  return null;
+}
+
+export async function loader({ request }: LoaderArgs) {
+  return null;
 }
 
 const validationSchema = z.object({
   firstName: z.string().min(1, { message: "Firstname is required" }),
   lastName: z.string().min(1, { message: "Lastname is required" }),
-  email: z.string().min(1, { message: "Email is required" }).email({
+  email: z.string().min(1, { message: "Email .bodyis required" }).email({
     message: "Must be a valid email",
   }),
 });
@@ -28,15 +34,15 @@ const Form = () => {
     resolver: zodResolver(validationSchema),
   });
 
-  const onSubmit: SubmitHandler<ValidationSchema> = (value) => {
-    console.log(value);
-    submit({ data: value }, { method: "post" });
+  const onSubmit: SubmitHandler<ValidationSchema> = (data) => {
+    submit(data, { method: "post", encType: "application/json" });
   };
 
   return (
     <form className="px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-4 md:flex md:justify-between">
-        <div className="mb-4 md:mr-2 md:mb-0">
+  
+      <div className="mb-4">
+        <div>
           <label
             className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="firstName"
@@ -58,7 +64,9 @@ const Form = () => {
             </p>
           )}
         </div>
-        <div className="md:ml-2">
+      </div>
+      <div className="mb-4">
+        <div>
           <label
             className="block mb-2 text-sm font-bold text-gray-700"
             htmlFor="lastName"
@@ -82,26 +90,28 @@ const Form = () => {
         </div>
       </div>
       <div className="mb-4">
-        <label
-          className="block mb-2 text-sm font-bold text-gray-700"
-          htmlFor="email"
-        >
-          Email
-        </label>
-        <input
-          className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
-            errors.email && "border-red-500"
-          } rounded appearance-none focus:outline-none focus:shadow-outline`}
-          id="email"
-          type="email"
-          placeholder="Email"
-          {...register("email")}
-        />
-        {errors.email && (
-          <p className="text-xs italic text-red-500 mt-2">
-            {errors.email?.message}
-          </p>
-        )}
+        <div>
+          <label
+            className="block mb-2 text-sm font-bold text-gray-700"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            className={`w-full px-3 py-2 text-sm leading-tight text-gray-700 border ${
+              errors.email && "border-red-500"
+            } rounded appearance-none focus:outline-none focus:shadow-outline`}
+            id="email"
+            type="email"
+            placeholder="Email"
+            {...register("email")}
+          />
+          {errors.email && (
+            <p className="text-xs italic text-red-500 mt-2">
+              {errors.email?.message}
+            </p>
+          )}
+        </div>
       </div>
       <div className="mb-6 text-center">
         <button
