@@ -1,14 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { error } from "@prisma/internals/dist/logger";
 import { useSubmit } from "@remix-run/react";
 import {
   FieldErrors,
-  RegisterOptions,
   SubmitHandler,
   UseFormRegister,
   useForm,
 } from "react-hook-form";
-import { z } from "zod";
+import { Schema, ZodObject, z } from "zod";
 
 export const generateFormFromZod: functionType = (
   schema: z.ZodObject<any>,
@@ -49,12 +47,12 @@ type functionType = (schema: z.ZodObject<any>, fields: FieldsType[]) => any;
 export type FieldsType = {
   fieldKey: string;
   fieldLabel: string;
-  fieldInputType: fieldInputType;
+  fieldInputType: FieldInputType;
   fieldPlaceHolder?: string;
   fieldDescription?: string;
 };
 
-export type fieldInputType = "text" | "password" | "number" | "textArea";
+export type FieldInputType = "text" | "password" | "number" | "textArea";
 
 const generateTextFormInput = (
   //Need to work more for covering more input types
@@ -79,8 +77,74 @@ const generateTextFormInput = (
         {...register(inputInfo.fieldKey)}
       />
       {errors[inputInfo.fieldKey] && (
-        <p className="text-xs italic text-red-500 mt-2">//TODO fix later</p>
+        <p className="text-xs italic text-red-500 mt-2">
+          {errors[inputInfo.fieldKey]?.message?.toString()}
+        </p>
       )}
     </div>
   );
 };
+
+// function extendZodType<T extends ZodObject<any>>(
+//   schema: T,
+//   field: keyof T["shape"]
+// ): T["shape"][typeof field] {
+//   return schema.shape[field];
+// }
+
+export interface ZodExtendField extends ZodObject<any> {
+  fields?: {};
+}
+
+export function extendZodType<T extends ZodObject<any>>(
+  schema: T,
+  field: Record<
+    keyof T["shape"],
+    { label: string; placeholder: string; type?: FieldInputType }
+  >
+) {
+  const newSchema: ZodExtendField = schema;
+  newSchema.fields = field;
+  return newSchema;
+}
+
+const validationSchema = z.object({
+  firstName: z.string().min(1, { message: "Firstname is required" }),
+});
+
+const testExtendZod = extendZodType(validationSchema, {
+  firstName: {
+    label: "",
+    placeholder: "",
+    type: "text",
+  },
+});
+
+// type MyType = {
+//   [K in (typeof keys)[number]]: {
+//     name: string;
+//     value: string;
+//   };
+// };
+
+// export const extendZod = <T extends ZodObject<any>>(schema:T)=> ({[Object.keys(schema.shape)]: number})
+
+// const zodGen = extendZods(schema, {
+//   name: {
+//     defaultValue: "",
+//     placeholder: "",
+//     type: "",
+//   },
+//   desc: {
+//     defaultValue: "",
+//     placeholder: "",
+//     type: "",
+
+//   },
+// })
+
+// type KeyFromZodObject<T extends ZodObject<any>> = {
+//   [K in keyof typeof T["shape"]]: {
+//     name: string;
+//   };
+// };

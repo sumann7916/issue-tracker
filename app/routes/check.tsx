@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSubmit } from "@remix-run/react";
 import { ActionArgs, LoaderArgs } from "@remix-run/node";
-import { generateFormFromZod } from "~/components/ZodForm";
+import { extendZodType, generateFormFromZod } from "~/components/ZodForm";
 
 export async function action({ request }: ActionArgs) {
   console.log(request.json());
@@ -11,6 +11,24 @@ export async function action({ request }: ActionArgs) {
 }
 
 export async function loader({ request }: LoaderArgs) {
+  const schema = z.object({
+    firstName: z.string().min(1, { message: "Firstname is required" }),
+    lastName: z.string().min(1, { message: "Lastname is required" }),
+  });
+
+  const testExtendZod = extendZodType(schema, {
+    firstName: {
+      label: "",
+      placeholder: "",
+      type: "text",
+    },
+    lastName: {
+      label: "",
+      placeholder: "",
+      type: "text",
+    },
+  });
+  console.log(testExtendZod.fields);
   return null;
 }
 
@@ -40,7 +58,6 @@ const Form = () => {
 
   return (
     <form className="px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit(onSubmit)}>
-  
       <div className="mb-4">
         <div>
           <label

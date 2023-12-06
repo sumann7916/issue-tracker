@@ -1,6 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import { FieldsType, generateFormFromZod } from "~/components/ZodForm";
+import { ZodFormGenerator } from "~/lib/form-generator";
 
 const validationSchema = z.object({
   firstName: z.string().min(10, { message: "Firstname is required" }),
@@ -20,7 +21,14 @@ const fields: FieldsType[] = [
   },
 ];
 const GenerateForm = () => {
-  return generateFormFromZod(validationSchema, fields);
+  const validationSchema = z.object({
+    firstName: z.string().min(1, { message: "Firstname is required" }),
+  });
+  return ZodFormGenerator({
+    schema: validationSchema,
+    fields: { firstName: {} },
+    method: "post",
+  });
 };
 
 export default GenerateForm;
